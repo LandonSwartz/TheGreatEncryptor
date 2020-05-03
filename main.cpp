@@ -5,7 +5,7 @@
 #include<iostream>
 #include<pthread.h>
 #include<vector>
-#include"fileRAII.cpp"
+#include"fileRAII.h"
 
 using namespace std;
 
@@ -24,7 +24,7 @@ struct ft
  * start_index, and end_index to read in thread in segments
  */
 void *readFile(void *arg)
-{`
+{
 	int i; int c;
 	struct ft* fi = (struct ft*)arg;
 	FILE *file = fopen(fi->filename);
@@ -35,10 +35,43 @@ void *readFile(void *arg)
 	}
 }
 
-int main()
+void printMenu()
 {
-	vector<string> fileContents;  
+	cout<<"----------MENU----------"<<endl;
+	cout<<"1. Choose file to hash"<end;
+	cout<<"2. Hash File"<<endl;
+	cout<<"3. Exit program"<<endl;
+}
 
-	//reading in file
+//command line will be ./TheGreatEncryptor filename howtohash
+int main(int argc, char*argv[])
+{
+	const char * filename = "testing.txt";
+	vector<string> fileContents;
+	File file(testing.txt);
+	pthreads_t threads[NUM_THREADS];
+	int choice;
+	int exitCode = 1;
 
+	//creating threads
+	while(exitCode)
+	{
+		printMenu();
+		cin>>choice;
+
+		switch(choice) {
+			case 1:
+				//read in file and prove that you've read it in
+				break;
+			case 2: 
+				//hash file
+				break;
+			case 3:
+				//exit program
+				break;
+			default:
+				//wrong choice
+				break;
+		}
+	}
 }
