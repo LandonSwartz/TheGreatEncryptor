@@ -18,7 +18,7 @@ struct ft
 	int start_index;
 	int end_index;
 	//may need to add filecontents vector
-}
+};
 
 /*Thread function that takes in arg struct with filename,
  * start_index, and end_index to read in thread in segments
@@ -27,7 +27,7 @@ void *readFile(void *arg)
 {
 	int i; int c;
 	struct ft* fi = (struct ft*)arg;
-	FILE *file = fopen(fi->filename);
+	//FILE *file = fopen(fi->filename);
 	fseek(file, fi->start_index, SEEK_SET);
 	for(int i=0; i < fi->end_index - fi->start_index; i++)
 	{
@@ -38,18 +38,17 @@ void *readFile(void *arg)
 void printMenu()
 {
 	cout<<"----------MENU----------"<<endl;
-	cout<<"1. Choose file to hash"<end;
+	cout<<"1. Choose file to hash"<<endl;
 	cout<<"2. Hash File"<<endl;
 	cout<<"3. Exit program"<<endl;
 }
 
-//command line will be ./TheGreatEncryptor filename howtohash
 int main(int argc, char*argv[])
 {
 	const char * filename = "testing.txt";
 	vector<string> fileContents;
-	File file(testing.txt);
-	pthreads_t threads[NUM_THREADS];
+	File file(filename);
+	pthread_t threads[NUM_THREADS];
 	int choice;
 	int exitCode = 1;
 
@@ -74,4 +73,6 @@ int main(int argc, char*argv[])
 				break;
 		}
 	}
+
+	return 0;
 }

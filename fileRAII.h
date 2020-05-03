@@ -12,7 +12,7 @@ class write_error : public file_error { };
 class File
 {
 	public:
-		file(const char* filename) : m_file_handle(fopen(filename, "w+"))
+		File(const char* filename) : m_file_handle(fopen(filename, "w+"))
 		{
 			if(m_file_handle == NULL)
 			{
@@ -20,7 +20,7 @@ class File
 			}
 		}
 
-		~file()
+		~File()
 		{
 			fclose(m_file_handle);
 		}
@@ -33,6 +33,6 @@ class File
 
 	private:
 		FILE * m_file_handle;
-		file(const file &);
-		file & operator=(const file &);
-}
+		File(const File &);
+		File & operator=(const File &);
+};
