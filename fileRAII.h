@@ -24,9 +24,11 @@ class File
 		{
 			fclose(m_file_handle);
 		}
-
+		
+		//takes in a string and writes it to the file
 		void write(const char* str);
 
+		//takes in string and writes it to file with buffer and num of chars
 		void write(const char* buffer, size_t num_chars);
 
 	private:
