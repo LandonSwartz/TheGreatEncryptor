@@ -24,7 +24,7 @@ class File
 		}
 		
 		//opens file with filename
-		void open(const char *filename);
+		void open(const string fileName);
 		
 		//takes in a string and writes it to the file
 		//void write(const char* str);
@@ -40,8 +40,16 @@ class File
 
 		void close();
 
-		std::string readLine();
+		string getFilename()
+		{
+			return filename;
+		}
+
+	//	std::string readLine();
+	
+	//	fstream operator=(const fstream &);
 
 	private:
 		fstream m_file_handle;
+		string filename;
 };
