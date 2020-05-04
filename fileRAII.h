@@ -24,7 +24,7 @@ class File
 		}
 		
 		//opens file with filename
-		void open(const char *fileName);
+		void open(const string fileName);
 		
 		//takes in a string and writes it to the file
 		//void write(const char* str);

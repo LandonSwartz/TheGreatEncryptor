@@ -7,6 +7,7 @@
 #include<pthread.h>
 #include<vector>
 #include<mutex>
+#include<string>
 #include<cstdlib>
 
 using namespace std;
@@ -18,8 +19,6 @@ struct ft
 {
 //	char *filename; Dont need
 	vector<string> fileVector;
-	int start_index;
-	int end_index;
 	File file; //to pass file to multi-thread function	
 };
 
@@ -32,8 +31,6 @@ void *readFile(void *arg)
 	struct ft* fi = (struct ft*)arg;
 	string filename = fi->file.getFilename();
 	cout<<"Filename is: "<< filename<<endl;
-	//FILE *readFile = fi->file;
-	//fseek(fi->file.returnFileHandle(), fi->start_index, SEEK_SET);
 	ifstream in(filename);
 	string word;
 	while(in>>word)
@@ -56,7 +53,7 @@ void printMenu()
 
 int main(int argc, char*argv[])
 {
-	const char * filename = "testing.txt";
+	string filename;
 	vector<string> fileContents;
 
 	struct ft * args = new (struct ft);
@@ -66,9 +63,6 @@ int main(int argc, char*argv[])
 		exit(1);
 	}
 	args->fileVector = fileContents;
-	args->file.open(filename);
-	args->start_index = 0;
-	args->end_index = 5;
 
 	pthread_t threads[NUM_THREADS];
 
@@ -88,6 +82,11 @@ int main(int argc, char*argv[])
 				//get size of file
 				//divide into even chunks
 				//send to the threads
+				cout<<"What is the name of the file to hash?"<<endl;
+				cin>>filename;
+				cout<<"You choose to read in the file: "<<filename<<endl;
+				cout<<"If wrong then please read in again"<<endl;
+				args->file.open(filename);
 				rc = pthread_create(&threads[0], NULL, readFile, (void *)args);
 				pthread_join(threads[0], NULL);
 

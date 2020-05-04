@@ -3,7 +3,7 @@
 
 #include"fileRAII.h"
 
-void File::open(const char *fileName)
+void File::open(const string fileName)
 {
 	m_file_handle.open(fileName);
 	filename = fileName;
