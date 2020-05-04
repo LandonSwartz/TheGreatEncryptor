@@ -10,16 +10,16 @@ void File::open(const char *filename)
 
 void File::close()
 {
-	if(m_file_handle.isOpen())
+	if(m_file_handle.is_open())
 	{
 		m_file_handle.close();
 	}
 }
 
-std::string File::readLine()
+/*std::string File::readLine()
 {
-	return m_file_handle.readLine();
-}
+	return m_file_handle.readsome();
+}*/
 
 /*void File::write(const char*str)
 {

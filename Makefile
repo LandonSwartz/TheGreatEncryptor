@@ -2,7 +2,7 @@
 
 CXX := g++ #compilier flag
 
-CXXFLAGS := -std=c++11 -pthread -ggdb -O0 -Wall #compilier options
+CXXFLAGS := -std=c++11 -pthread -ggdb -O0 # -Wall #compilier options
 
 obj := main.o fileRAII.o #$(wildcard *.o) 
 

@@ -40,7 +40,9 @@ class File
 
 		void close();
 
-		std::string readLine();
+	//	std::string readLine();
+	
+	//	fstream operator=(const fstream &);
 
 	private:
 		fstream m_file_handle;
