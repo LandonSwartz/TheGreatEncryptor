@@ -53,7 +53,7 @@ int main(int argc, char*argv[])
 	const char * filename = "testing.txt";
 	vector<string> fileContents;
 
-	struct ft * args = (struct ft *)malloc(sizeof(struct ft));
+	struct ft * args = new (struct ft);
 	if(!args)
 	{
 		cerr<<"Memory allocation failed!"<<endl;
@@ -90,6 +90,7 @@ int main(int argc, char*argv[])
 				break;
 			case 3:
 				//exit program
+				exitCode = 0;
 				break;
 			default:
 				//wrong choice
