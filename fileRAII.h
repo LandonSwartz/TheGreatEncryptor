@@ -2,6 +2,7 @@
 //Landon Swartz
 
 #include<cstdio>
+#include<fstream>
 
 using namespace std;
 class file_error { };
@@ -12,27 +13,35 @@ class write_error : public file_error { };
 class File
 {
 	public:
-		File(const char* filename) : m_file_handle(fopen(filename, "w+"))
-		{
-			if(m_file_handle == NULL)
-			{
-				throw open_error();
-			}
-		}
-
+		File() { }
+		
 		~File()
 		{
-			fclose(m_file_handle);
+			if(m_file_handle.is_open())
+			{
+				m_file_handle.close();
+			}
 		}
 		
+		//opens file with filename
+		void open(const char *filename);
+		
 		//takes in a string and writes it to the file
-		void write(const char* str);
+		//void write(const char* str);
 
 		//takes in string and writes it to file with buffer and num of chars
-		void write(const char* buffer, size_t num_chars);
+		//void write(const char* buffer, size_t num_chars);
+		
+		//boolean function to see if file is open
+		bool isOpen() const
+		{
+			return m_file_handle.is_open();
+		}
+
+		void close();
+
+		std::string readLine();
 
 	private:
-		FILE * m_file_handle;
-		File(const File &);
-		File & operator=(const File &);
+		fstream m_file_handle;
 };

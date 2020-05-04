@@ -3,7 +3,25 @@
 
 #include"fileRAII.h"
 
-void File::write(const char*str)
+void File::open(const char *filename)
+{
+	m_file_handle.open(filename);
+}
+
+void File::close()
+{
+	if(m_file_handle.isOpen())
+	{
+		m_file_handle.close();
+	}
+}
+
+std::string File::readLine()
+{
+	return m_file_handle.readLine();
+}
+
+/*void File::write(const char*str)
 {
 	if(fputs(str, m_file_handle) == EOF)
 	{
@@ -17,4 +35,4 @@ void File::write(const char* buffer, size_t num_chars)
 	{
 		throw write_error();
 	}
-}
+}*/
