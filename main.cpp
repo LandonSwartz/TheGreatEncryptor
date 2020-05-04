@@ -2,10 +2,11 @@
 //C/C++ final project
 //Landon Swartz, Rushil Thakker, Aaron Fuller
 
+#include"fileRAII.h"
 #include<iostream>
 #include<pthread.h>
 #include<vector>
-#include"fileRAII.h"
+#include<mutex>
 
 using namespace std;
 
@@ -14,10 +15,12 @@ using namespace std;
 //struct for passing to reading file. Contains file, start index, and end index
 struct ft
 {
-	char *filename;
+//	char *filename; Dont need
+	vector<string> fileVector;
 	int start_index;
 	int end_index;
-	//may need to add filecontents vector
+	File file; //to pass file to multi-thread function	
+	vector
 };
 
 /*Thread function that takes in arg struct with filename,
@@ -47,8 +50,15 @@ int main(int argc, char*argv[])
 {
 	const char * filename = "testing.txt";
 	vector<string> fileContents;
-	File file(filename);
+	File f;
+	f.open(filename);
+
+	struct ft args;
+	args.fileContents = fileVector;
+	args.file = f;
+
 	pthread_t threads[NUM_THREADS];
+
 	int choice;
 	int exitCode = 1;
 
