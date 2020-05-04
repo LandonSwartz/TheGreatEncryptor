@@ -30,12 +30,18 @@ void *readFile(void *arg)
 {
 	int i; int c;
 	struct ft* fi = (struct ft*)arg;
+	string filename = fi->file.getFilename();
+	cout<<"Filename is: "<< filename<<endl;
 	//FILE *readFile = fi->file;
 	//fseek(fi->file.returnFileHandle(), fi->start_index, SEEK_SET);
-	for(int i=0; i < fi->end_index - fi->start_index; i++)
+	ifstream in(filename);
+	string word;
+	while(in>>word)
 	{
-		
+		fi->fileVector.push_back(word);
+		cout<<fi->fileVector.back()<<endl;
 	}
+	in.close();
 
 	return NULL;
 }
@@ -62,7 +68,7 @@ int main(int argc, char*argv[])
 	args->fileVector = fileContents;
 	args->file.open(filename);
 	args->start_index = 0;
-	args->end_index = 20;
+	args->end_index = 5;
 
 	pthread_t threads[NUM_THREADS];
 
@@ -84,6 +90,8 @@ int main(int argc, char*argv[])
 				//send to the threads
 				rc = pthread_create(&threads[0], NULL, readFile, (void *)args);
 				pthread_join(threads[0], NULL);
+
+				cout<<"File was readed!"<<endl;
 				break;
 			case 2: 
 				//hash file

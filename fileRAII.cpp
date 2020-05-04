@@ -3,9 +3,10 @@
 
 #include"fileRAII.h"
 
-void File::open(const char *filename)
+void File::open(const char *fileName)
 {
-	m_file_handle.open(filename);
+	m_file_handle.open(fileName);
+	filename = fileName;
 }
 
 void File::close()
