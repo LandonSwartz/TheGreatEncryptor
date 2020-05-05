@@ -66,6 +66,9 @@ int main(int argc, char*argv[])
 	}
 	args->fileVector = fileContents;
 
+	hashing HashObj;
+	string password;
+
 	pthread_t threads[NUM_THREADS];
 
 	int choice;
@@ -91,11 +94,16 @@ int main(int argc, char*argv[])
 				args->file.open(filename);
 				rc = pthread_create(&threads[0], NULL, readFile, (void *)args);
 				pthread_join(threads[0], NULL);
-
 				cout<<"File was readed!"<<endl;
 				break;
 			case 2: 
 				//hash file
+				cout<<"What would you like the password to be?"<<endl;
+				cin>>password;
+				cout<<"You entered: "<<password<<endl;
+				HashObj.set_password(password);
+				HashObj.set_hash_key_from_password();
+				cout<<"Hash complete. Your hash key is: "<<HashObj.get_hash_key()<<endl;
 				break;
 			case 3:
 				//exit program
