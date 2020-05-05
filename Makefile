@@ -4,7 +4,7 @@ CXX := g++ #compilier flag
 
 CXXFLAGS := -std=c++11 -pthread -ggdb -O0 # -Wall #compilier options
 
-obj := main.o fileRAII.o ExceptionHandlers.o HashClass.o #$(wildcard *.o) 
+obj := fileRAII.o ExceptionHandlers.o HashClass.o main.o #$(wildcard *.o) 
 
 TheGreatEncryptor: $(obj)
 	$(CXX) $(CXXFLAGS) -o TheGreatEncryptor $(obj)
