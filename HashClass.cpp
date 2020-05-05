@@ -12,7 +12,7 @@
 
 using namespace std;
 
-void test_function();
+//void test_function();
 
 class hashing
 {
@@ -39,16 +39,16 @@ class hashing
 			}
 };
 
-int main(void)
+/*int main(void)
 {
 	test_function();
 
 	return 0;
-}
+}*/
 
 //	Below is a test for the above hashing class
 
-void test_function()
+/*void test_function()
 {
 	hashing hashing_obj;
 	hashing hashing_obj2;
@@ -86,4 +86,4 @@ void test_function()
 	{
 		cout << "Passwords 3 and 4 are different :(" << endl;
 	}
-}
+}*/

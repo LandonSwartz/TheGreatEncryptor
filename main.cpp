@@ -3,6 +3,8 @@
 //Landon Swartz, Rushil Thakker, Aaron Fuller
 
 #include"fileRAII.h"
+#include"ExceptionHandlers.cpp"
+#include"HashClass.cpp"
 #include<iostream>
 #include<pthread.h>
 #include<vector>
@@ -36,7 +38,7 @@ void *readFile(void *arg)
 	while(in>>word)
 	{
 		fi->fileVector.push_back(word);
-		cout<<fi->fileVector.back()<<endl;
+	//	cout<<fi->fileVector.back()<<endl;
 	}
 	in.close();
 
