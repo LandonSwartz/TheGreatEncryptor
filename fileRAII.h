@@ -3,6 +3,7 @@
 
 #include<cstdio>
 #include<fstream>
+//#include"ExceptionHandlers.cpp"
 
 using namespace std;
 class file_error { };
@@ -26,28 +27,20 @@ class File
 		//opens file with filename
 		void open(const string fileName);
 		
-		//takes in a string and writes it to the file
-		//void write(const char* str);
-
-		//takes in string and writes it to file with buffer and num of chars
-		//void write(const char* buffer, size_t num_chars);
-		
 		//boolean function to see if file is open
 		bool isOpen() const
 		{
 			return m_file_handle.is_open();
 		}
 
+		//closes file
 		void close();
 
+		//returns filename property
 		string getFilename()
 		{
 			return filename;
 		}
-
-	//	std::string readLine();
-	
-	//	fstream operator=(const fstream &);
 
 	private:
 		fstream m_file_handle;

@@ -14,7 +14,7 @@
 
 using namespace std;
 
-#define NUM_THREADS 5 //number of threads
+#define NUM_THREADS 1 //number of threads
 
 //struct for passing to reading file. Contains file, start index, and end index
 struct ft
@@ -38,7 +38,6 @@ void *readFile(void *arg)
 	while(in>>word)
 	{
 		fi->fileVector.push_back(word);
-	//	cout<<fi->fileVector.back()<<endl;
 	}
 	in.close();
 
@@ -48,9 +47,10 @@ void *readFile(void *arg)
 void printMenu()
 {
 	cout<<"----------MENU----------"<<endl;
-	cout<<"1. Choose file to hash"<<endl;
+	cout<<"1. Choose file to hash and/or encrypt"<<endl;
 	cout<<"2. Hash File"<<endl;
-	cout<<"3. Exit program"<<endl;
+	cout<<"3. Encrypt the file"<<endl;
+	cout<<"4. Exit program"<<endl;
 }
 
 int main(int argc, char*argv[])
@@ -106,11 +106,16 @@ int main(int argc, char*argv[])
 				cout<<"Hash complete. Your hash key is: "<<HashObj.get_hash_key()<<endl;
 				break;
 			case 3:
+				//encryption class
+				break;
+			case 4:
 				//exit program
 				exitCode = 0;
 				break;
 			default:
 				//wrong choice
+				cout<<"Please choose a choice between 1-4"<<endl;
+				printMenu();
 				break;
 		}
 	}
