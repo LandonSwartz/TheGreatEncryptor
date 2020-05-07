@@ -4,7 +4,8 @@ CXX := g++ #compilier flag
 
 CXXFLAGS := -std=c++11 -pthread -ggdb -O0 # -Wall #compilier options
 
-obj := fileRAII.o ExceptionHandlers.o HashClass.o main.o #$(wildcard *.o) 
+obj := fileRAII.o ExceptionHandlers.o HashClass.o EncryptionClass.o main.o #$(wildcard *.o) 
+
 
 TheGreatEncryptor: $(obj)
 	$(CXX) $(CXXFLAGS) -o TheGreatEncryptor $(obj)
@@ -20,6 +21,9 @@ ExceptionHandlers.o : ExceptionHandlers.cpp #for exception handler class
 
 HashClass.o : HashClass.cpp
 	$(CXX) $(CXXFLAGS) -c HashClass.cpp
+
+EncryptionClass.o : EncryptionClass.cpp
+	$(CXX) $(CXXFLAGS) -c EncryptionClass.cpp
 
 #need to add for hash class
 
