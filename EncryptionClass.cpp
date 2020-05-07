@@ -2,7 +2,7 @@
 #include<pthread.h>
 #include<vector>
 #include<string>
-#include "ExceptionHandlers.h"
+#include "ExceptionHandlers.cpp"
 #define NUM_ENCRYPTION_THREADS 10
 
 using namespace std;
