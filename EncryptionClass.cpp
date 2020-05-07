@@ -7,6 +7,9 @@
 
 using namespace std;
 
+// Create a typecast to use the non-static virtual functions in a thread
+typedef void * (*thread_function)(void *);
+
 // The encryption class handles all encryption and decryption of the data
 class encryption_base
 {
@@ -97,7 +100,7 @@ private:
         vector<pthread_t> encryption_threads;
         for (auto prm_vct : encryption_alg_prms_vect) {
             pthread_t new_thread;
-            pthread_create(&new_thread, NULL, this->encryption_algorithm, (void *)prm_vct);
+            pthread_create(&new_thread, NULL, (thread_function)(this->encryption_algorithm), prm_vct);
             encryption_threads.push_back(new_thread);
         }
 
@@ -186,7 +189,7 @@ private:
         vector<pthread_t> encryption_threads;
         for (auto prm_vct : encryption_alg_prms_vect) {
             pthread_t new_thread;
-            pthread_create(&new_thread, NULL, this->decryption_algorithm, (void *)prm_vct);
+            pthread_create(&new_thread, NULL, this->decryption_algorithm, prm_vct);
             encryption_threads.push_back(new_thread);
         }
 
