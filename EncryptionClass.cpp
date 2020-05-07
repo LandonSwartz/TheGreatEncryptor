@@ -24,9 +24,33 @@ private:
         int end_index;
     } alg_prms;
 
-    // The function which does the actual encryption
-    virtual void * encryption_algorithm(void * params) {
+    // The function which does the actual encryption. For the base class, this will be a simple cipher.
+    virtual void * encryption_algorithm(void * params_void) {
+        // Encryption algorithm, basic code necessary for other implementations of this function
+        algorithm_parameters * params = static_cast<algorithm_parameters *>(params_void);
 
+        // Calculate the cipher offset.
+        int cipher_offset = this->hash_key % 255;
+
+        // Traverse through each string this thread is responsible for.
+        for (int i = params->start_index; i <= params->end_index; i++) {
+            // The syntax below explained:
+                // params is a reference to a struct
+                // use -> notation because params is a reference to retrieve data member of struct
+                // data member of struct is reference to a vector object of strings, so dereference it
+                // use [] notation to access index of given string from dereferenced vector object
+                // after the string is indexed, get its address so the string can be modified
+            string * current_string = &((*(params->data))[i]);
+            // At this point, we have a reference to the string that should be encrypted.
+            for (int c = 0; c < current_string->length(); c++) {
+                // Iterate through every character in the string, apply the cipher.
+                int current_char = ((int)((*current_string)[c]));
+                current_char += cipher_offset;
+                if (current_char > 255)
+                    current_char -= 255;
+                (*current_string)[c] = (char)current_char;
+            }
+        }
     };
 
     bool encrypt_data() {
@@ -58,6 +82,7 @@ private:
             num_threads = 1;
             indices_per_thread = data->size();
         }
+        // Create structs for each thread
         for (int i = 0; i < num_threads; i++) {
             alg_prms * alg_prms_strc = new alg_prms();
             alg_prms_strc->data = this->data;
@@ -90,8 +115,32 @@ private:
         return true;
     };
     
-    virtual void * decryption_algorithm(void * params) {
+    virtual void * decryption_algorithm(void * params_void) {
+        // Encryption algorithm, basic code necessary for other implementations of this function
+        algorithm_parameters * params = static_cast<algorithm_parameters *>(params_void);
 
+        // Calculate the cipher offset.
+        int cipher_offset = this->hash_key % 255;
+
+        // Traverse through each string this thread is responsible for.
+        for (int i = params->start_index; i <= params->end_index; i++) {
+            // The syntax below explained:
+                // params is a reference to a struct
+                // use -> notation because params is a reference to retrieve data member of struct
+                // data member of struct is reference to a vector object of strings, so dereference it
+                // use [] notation to access index of given string from dereferenced vector object
+                // after the string is indexed, get its address so the string can be modified
+            string * current_string = &((*(params->data))[i]);
+            // At this point, we have a reference to the string that should be encrypted.
+            for (int c = 0; c < current_string->length(); c++) {
+                // Iterate through every character in the string, apply the cipher.
+                int current_char = ((int)((*current_string)[c]));
+                current_char -= cipher_offset;
+                if (current_char < 0)
+                    current_char += 255;
+                (*current_string)[c] = (char)current_char;
+            }
+        }
     };
     
     bool decrypt_data() {
