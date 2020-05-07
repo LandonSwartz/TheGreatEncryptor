@@ -28,7 +28,7 @@ private:
     } alg_prms;
 
     // The function which does the actual encryption. For the base class, this will be a simple cipher.
-    virtual void * encryption_algorithm(void * params_void) {
+    void * encryption_algorithm(void * params_void) {
         // Encryption algorithm, basic code necessary for other implementations of this function
         algorithm_parameters * params = static_cast<algorithm_parameters *>(params_void);
 
@@ -100,7 +100,7 @@ private:
         vector<pthread_t> encryption_threads;
         for (auto prm_vct : encryption_alg_prms_vect) {
             pthread_t new_thread;
-            pthread_create(&new_thread, NULL, (thread_function)(this->encryption_algorithm), prm_vct);
+            pthread_create(&new_thread, NULL, (thread_function)(&encryption_base::encryption_algorithm), prm_vct);
             encryption_threads.push_back(new_thread);
         }
 
@@ -189,7 +189,7 @@ private:
         vector<pthread_t> encryption_threads;
         for (auto prm_vct : encryption_alg_prms_vect) {
             pthread_t new_thread;
-            pthread_create(&new_thread, NULL, (thread_function)(this->decryption_algorithm), prm_vct);
+            pthread_create(&new_thread, NULL, (thread_function)(&encryption_base::decryption_algorithm), prm_vct);
             encryption_threads.push_back(new_thread);
         }
 
