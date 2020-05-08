@@ -16,10 +16,9 @@ using namespace std;
 
 #define NUM_THREADS 1 //number of threads
 
-//struct for passing to reading file. Contains file, start index, and end index
+//struct for passing to reading file. Contains filevector that has all the strings and file pointer 
 struct ft
 {
-//	char *filename; Dont need
 	vector<string> fileVector;
 	File file; //to pass file to multi-thread function	
 };
@@ -48,8 +47,8 @@ void printMenu()
 {
 	cout<<"----------MENU----------"<<endl;
 	cout<<"1. Choose file to hash and/or encrypt"<<endl;
-	cout<<"2. Hash File"<<endl;
-	cout<<"3. Encrypt the file"<<endl;
+	cout<<"2. Encrypt File"<<endl;
+	cout<<"3. Decrypt file"<<endl;
 	cout<<"4. Exit program"<<endl;
 }
 
@@ -97,13 +96,17 @@ int main(int argc, char*argv[])
 				cout<<"File was readed!"<<endl;
 				break;
 			case 2: 
-				//hash file
+				//encrypt file
+				
+
+
+				/*
 				cout<<"What would you like the password to be?"<<endl;
 				cin>>password;
 				cout<<"You entered: "<<password<<endl;
 				HashObj.set_password(password);
 				HashObj.set_hash_key_from_password();
-				cout<<"Hash complete. Your hash key is: "<<HashObj.get_hash_key()<<endl;
+				cout<<"Hash complete. Your hash key is: "<<HashObj.get_hash_key()<<endl;*/
 				break;
 			case 3:
 				//encryption class
