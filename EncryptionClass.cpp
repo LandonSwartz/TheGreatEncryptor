@@ -202,8 +202,7 @@ public:
     }
 
     // The function which does the actual encryption. For the base class, this will be a simple cipher.
-    static 4
-    void * encryption_algorithm(void * params_void) {
+    static void * encryption_algorithm(void * params_void) {
         // Encryption algorithm, basic code necessary for other implementations of this function
         algorithm_parameters * params = static_cast<algorithm_parameters *>(params_void);
 
