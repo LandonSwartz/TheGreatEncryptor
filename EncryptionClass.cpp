@@ -1,5 +1,4 @@
 // Aaron
-#include<iostream>
 
 #include<cstdlib>
 #include<pthread.h>
@@ -9,6 +8,14 @@
 #define NUM_ENCRYPTION_THREADS 10
 
 using namespace std;
+
+/*
+namespace algorithms
+{
+    void * encryption_algorithm(void *);
+    void * decryption_algorithm(void *);
+}
+*/
 
 // Create a typecast to use the non-static virtual functions in a thread
 typedef void * (*thread_function)(void *);
@@ -21,43 +28,6 @@ private:
     int data_state = 0;
     vector<string> * data;
     int hash_key = 0;
-
-    typedef struct algorithm_parameters {
-        // The threads will need a reference to the vector with all the data in it.
-        vector<string> * data;
-        // Tell this specific thread where to start and end.
-        int start_index;
-        int end_index;
-    } alg_prms;
-
-    // The function which does the actual encryption. For the base class, this will be a simple cipher.
-    void * encryption_algorithm(void * params_void) {
-        // Encryption algorithm, basic code necessary for other implementations of this function
-        algorithm_parameters * params = static_cast<algorithm_parameters *>(params_void);
-
-        // Calculate the cipher offset.
-        int cipher_offset = this->hash_key % 255;
-
-        // Traverse through each string this thread is responsible for.
-        for (int i = params->start_index; i <= params->end_index; i++) {
-            // The syntax below explained:
-                // params is a reference to a struct
-                // use -> notation because params is a reference to retrieve data member of struct
-                // data member of struct is reference to a vector object of strings, so dereference it
-                // use [] notation to access index of given string from dereferenced vector object
-                // after the string is indexed, get its address so the string can be modified
-            string * current_string = &((*(params->data))[i]);
-            // At this point, we have a reference to the string that should be encrypted.
-            for (int c = 0; c < current_string->length(); c++) {
-                // Iterate through every character in the string, apply the cipher.
-                int current_char = ((int)((*current_string)[c]));
-                current_char += cipher_offset;
-                if (current_char > 255)
-                    current_char -= 255;
-                (*current_string)[c] = (char)current_char;
-            }
-        }
-    };
 
     bool encrypt_data() {
         if (this->hash_key == 0) {
@@ -104,7 +74,7 @@ private:
         vector<pthread_t> encryption_threads;
         for (auto prm_vct : encryption_alg_prms_vect) {
             pthread_t new_thread;
-            pthread_create(&new_thread, NULL, (thread_function)(&encryption_base::encryption_algorithm), prm_vct);
+            pthread_create(&new_thread, NULL, encryption_algorithm, prm_vct);
             encryption_threads.push_back(new_thread);
         }
 
@@ -120,34 +90,6 @@ private:
 
         // Return true to indicate the encryption was successful.
         return true;
-    };
-    
-    virtual void * decryption_algorithm(void * params_void) {
-        // Encryption algorithm, basic code necessary for other implementations of this function
-        algorithm_parameters * params = static_cast<algorithm_parameters *>(params_void);
-
-        // Calculate the cipher offset.
-        int cipher_offset = this->hash_key % 255;
-
-        // Traverse through each string this thread is responsible for.
-        for (int i = params->start_index; i <= params->end_index; i++) {
-            // The syntax below explained:
-                // params is a reference to a struct
-                // use -> notation because params is a reference to retrieve data member of struct
-                // data member of struct is reference to a vector object of strings, so dereference it
-                // use [] notation to access index of given string from dereferenced vector object
-                // after the string is indexed, get its address so the string can be modified
-            string * current_string = &((*(params->data))[i]);
-            // At this point, we have a reference to the string that should be encrypted.
-            for (int c = 0; c < current_string->length(); c++) {
-                // Iterate through every character in the string, apply the cipher.
-                int current_char = ((int)((*current_string)[c]));
-                current_char -= cipher_offset;
-                if (current_char < 0)
-                    current_char += 255;
-                (*current_string)[c] = (char)current_char;
-            }
-        }
     };
     
     bool decrypt_data() {
@@ -182,6 +124,7 @@ private:
         for (int i = 0; i < num_threads; i++) {
             alg_prms * alg_prms_strc = new alg_prms();
             alg_prms_strc->data = this->data;
+            alg_prms_strc->hash_key = this->hash_key;
             alg_prms_strc->start_index = (i * indices_per_thread);
             alg_prms_strc->end_index = ((i + 1) * indices_per_thread) - 1;
             encryption_alg_prms_vect.push_back(alg_prms_strc);
@@ -193,7 +136,7 @@ private:
         vector<pthread_t> encryption_threads;
         for (auto prm_vct : encryption_alg_prms_vect) {
             pthread_t new_thread;
-            pthread_create(&new_thread, NULL, (thread_function)(&encryption_base::decryption_algorithm), prm_vct);
+            pthread_create(&new_thread, NULL, decryption_algorithm, prm_vct);
             encryption_threads.push_back(new_thread);
         }
 
@@ -211,6 +154,15 @@ private:
         return true;
     };
 public:
+    typedef struct algorithm_parameters {
+        // The threads will need a reference to the vector with all the data in it.
+        vector<string> * data;
+        // Tell this specific thread where to start and end.
+        int start_index;
+        int end_index;
+        int hash_key;
+    } alg_prms;
+
     // Give the class some data to work with, call the appropriate function so it knows if the data is encrypted
     // or decrypted to begin with.
     void set_encrypted_data(vector<string> * data_ref) {
@@ -249,5 +201,63 @@ public:
         }
     }
 
-    
+    // The function which does the actual encryption. For the base class, this will be a simple cipher.
+    static 4
+    void * encryption_algorithm(void * params_void) {
+        // Encryption algorithm, basic code necessary for other implementations of this function
+        algorithm_parameters * params = static_cast<algorithm_parameters *>(params_void);
+
+        // Calculate the cipher offset.
+        int cipher_offset = params->hash_key % 255;
+
+        // Traverse through each string this thread is responsible for.
+        for (int i = params->start_index; i <= params->end_index; i++) {
+            // The syntax below explained:
+                // params is a reference to a struct
+                // use -> notation because params is a reference to retrieve data member of struct
+                // data member of struct is reference to a vector object of strings, so dereference it
+                // use [] notation to access index of given string from dereferenced vector object
+                // after the string is indexed, get its address so the string can be modified
+            string * current_string = &((*(params->data))[i]);
+            // At this point, we have a reference to the string that should be encrypted.
+            for (int c = 0; c < current_string->length(); c++) {
+                // Iterate through every character in the string, apply the cipher.
+                int current_char = ((int)((*current_string)[c]));
+                current_char += cipher_offset;
+                if (current_char > 255)
+                    current_char -= 255;
+                (*current_string)[c] = (char)current_char;
+            }
+        }
+    };
+
+    static void * decryption_algorithm(void * params_void) {
+        // Encryption algorithm, basic code necessary for other implementations of this function
+        algorithm_parameters * params = static_cast<algorithm_parameters *>(params_void);
+
+        // Calculate the cipher offset.
+        int cipher_offset = params->hash_key % 255;
+
+        // Traverse through each string this thread is responsible for.
+        for (int i = params->start_index; i <= params->end_index; i++) {
+            // The syntax below explained:
+                // params is a reference to a struct
+                // use -> notation because params is a reference to retrieve data member of struct
+                // data member of struct is reference to a vector object of strings, so dereference it
+                // use [] notation to access index of given string from dereferenced vector object
+                // after the string is indexed, get its address so the string can be modified
+            string * current_string = &((*(params->data))[i]);
+            // At this point, we have a reference to the string that should be encrypted.
+            for (int c = 0; c < current_string->length(); c++) {
+                // Iterate through every character in the string, apply the cipher.
+                int current_char = ((int)((*current_string)[c]));
+                current_char -= cipher_offset;
+                if (current_char < 0)
+                    current_char += 255;
+                (*current_string)[c] = (char)current_char;
+            }
+        }
+    };
 };
+
+
