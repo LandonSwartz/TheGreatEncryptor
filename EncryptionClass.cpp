@@ -64,6 +64,7 @@ private:
         for (int i = 0; i < num_threads; i++) {
             alg_prms * alg_prms_strc = new alg_prms();
             alg_prms_strc->data = this->data;
+            alg_prms_strc->hash_key = this->hash_key;
             alg_prms_strc->start_index = (i * indices_per_thread);
             alg_prms_strc->end_index = ((i + 1) * indices_per_thread) - 1;
             encryption_alg_prms_vect.push_back(alg_prms_strc);
@@ -208,27 +209,32 @@ public:
         algorithm_parameters * params = static_cast<algorithm_parameters *>(params_void);
 
         // Calculate the cipher offset.
+        //cout << "hash key is " << params->hash_key;
         int cipher_offset = params->hash_key % 255;
 
         // Traverse through each string this thread is responsible for.
         for (int i = params->start_index; i <= params->end_index; i++) {
-            cout << "encrypting string" << endl;
+            //cout << "encrypting string" << endl;
             // The syntax below explained:
                 // params is a reference to a struct
                 // use -> notation because params is a reference to retrieve data member of struct
                 // data member of struct is reference to a vector object of strings, so dereference it
                 // use [] notation to access index of given string from dereferenced vector object
                 // after the string is indexed, get its address so the string can be modified
+            //cout << "cipher_offset is " << cipher_offset << endl;
             string * current_string = &((*(params->data))[i]);
-            cout << "working on string " << *current_string << endl; 
+            //cout << "working on string " << *current_string << endl; 
             // At this point, we have a reference to the string that should be encrypted.
             for (int c = 0; c < current_string->length(); c++) {
                 // Iterate through every character in the string, apply the cipher.
-                cout << "applying cipher to character" << endl;
+                //cout << "applying cipher to character" << endl;
                 int current_char = ((int)((*current_string)[c]));
+                //cout << "character before cipher: " << current_char << endl;
                 current_char += cipher_offset;
+                //cout << "character after cipher: " << current_char << endl;
                 if (current_char > 255)
                     current_char -= 255;
+                //cout << "character after correction: " << current_char << endl;
                 (*current_string)[c] = (char)current_char;
             }
         }
