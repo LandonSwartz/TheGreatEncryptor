@@ -1,4 +1,5 @@
 // Aaron
+#include<iostream>
 
 #include<cstdlib>
 #include<pthread.h>
@@ -211,6 +212,7 @@ public:
 
         // Traverse through each string this thread is responsible for.
         for (int i = params->start_index; i <= params->end_index; i++) {
+            cout << "encrypting string" << endl;
             // The syntax below explained:
                 // params is a reference to a struct
                 // use -> notation because params is a reference to retrieve data member of struct
@@ -218,9 +220,11 @@ public:
                 // use [] notation to access index of given string from dereferenced vector object
                 // after the string is indexed, get its address so the string can be modified
             string * current_string = &((*(params->data))[i]);
+            cout << "working on string " << *current_string << endl; 
             // At this point, we have a reference to the string that should be encrypted.
             for (int c = 0; c < current_string->length(); c++) {
                 // Iterate through every character in the string, apply the cipher.
+                cout << "applying cipher to character" << endl;
                 int current_char = ((int)((*current_string)[c]));
                 current_char += cipher_offset;
                 if (current_char > 255)
