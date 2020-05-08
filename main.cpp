@@ -3,8 +3,9 @@
 //Landon Swartz, Rushil Thakker, Aaron Fuller
 
 #include"fileRAII.h"
-#include"ExceptionHandlers.cpp"
+//#include"ExceptionHandlers.cpp"
 #include"HashClass.cpp"
+#include "EncryptionClass.cpp"
 #include<iostream>
 #include<pthread.h>
 #include<vector>
@@ -65,8 +66,18 @@ int main(int argc, char*argv[])
 	}
 	args->fileVector = fileContents;
 
-	hashing HashObj;
-	string password;
+	hashing HashObj_encrypt;
+	hashing HashObj_decrypt;
+
+	// Using one variable for password may be confusing. This has been changed because in one instance,
+	// a password is set, and in another, it is entered. Having separate variables should also improve
+	// the overall security of the program.
+	string password_set;
+	string password_entered;
+
+	// Create the base encryption class object
+	encryption_base encryptionObj;
+	encryption_base decryptionObj;
 
 	pthread_t threads[NUM_THREADS];
 
@@ -93,23 +104,56 @@ int main(int argc, char*argv[])
 				args->file.open(filename);
 				rc = pthread_create(&threads[0], NULL, readFile, (void *)args);
 				pthread_join(threads[0], NULL);
-				cout<<"File was readed!"<<endl;
+				cout<<"File was read!"<<endl;
 				break;
 			case 2: 
 				//encrypt file
 				
-
-
-				/*
 				cout<<"What would you like the password to be?"<<endl;
-				cin>>password;
-				cout<<"You entered: "<<password<<endl;
-				HashObj.set_password(password);
-				HashObj.set_hash_key_from_password();
-				cout<<"Hash complete. Your hash key is: "<<HashObj.get_hash_key()<<endl;*/
+				cin>>password_set;
+				cout<<"You entered: "<< password_set <<endl;
+				HashObj_encrypt.set_password(password_set);
+				HashObj_encrypt.set_hash_key_from_password();
+				
+				// Once the password has been retrieved, set the hash key in the encryption object
+				encryptionObj.set_hash_key(HashObj_encrypt.get_hash_key());
+
+				// The encryption class is ready to do some encryption. Give the class the data to work with.
+				// Data being sent to this function should not already be encrypted.
+				encryptionObj.set_decrypted_data(&(args->fileVector));
+
+				// Call the getter function on the encryption object. Even if the data is not retrieved, calling
+				// the getter function will perform the actual encryption. (This technically returns the address
+				// of the agrs->fileVector retrieved earlier, but we already have it.)
+				encryptionObj.get_encrypted_data();
+
+				// Landon & Rushil, the data is modified in the vector, now what function do I call to update the file??
+				/* 
+				Call function here to update file based on the now modified vector
+				*/
+
 				break;
 			case 3:
-				//encryption class
+				//decrypt file
+
+				cout << "Enter your password to decrypt the file: " << endl;
+				cin >> password_entered;
+				cout << "You entered:" << password_entered << endl;
+				HashObj_decrypt.set_password(password_entered);
+				HashObj_decrypt.set_hash_key_from_password();
+
+				// Set the hash key in the decryption object.
+				decryptionObj.set_hash_key(HashObj_decrypt.get_hash_key());
+
+				// Set the data based on what is stored in the file.
+				decryptionObj.set_encrypted_data(&(args->fileVector));
+
+				// Call the getter function to ensure the decryption happens.
+				decryptionObj.get_decrypted_data();
+
+				// Call the function necessary to overwrite the data in the file based on modifications made
+				// to the vector which contains the file contents.
+
 				break;
 			case 4:
 				//exit program
