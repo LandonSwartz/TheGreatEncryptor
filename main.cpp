@@ -103,6 +103,8 @@ int main(int argc, char*argv[])
 	{
 		printMenu();
 		cin>>choice;
+		cin.ignore();
+		cin.clear();
 
 		switch(choice) {
 			case 1:
@@ -112,6 +114,8 @@ int main(int argc, char*argv[])
 				//send to the threads
 				cout<<"What is the name of the file to hash?"<<endl;
 				cin>>filename;
+				cin.ignore();
+				cin.clear();
 				cout<<"You choose to read in the file: "<<filename<<endl;
 				cout<<"If wrong then please read in again"<<endl;
 				args->file.open(filename);
@@ -124,6 +128,8 @@ int main(int argc, char*argv[])
 				
 				cout<<"What would you like the password to be?"<<endl;
 				cin>>password_set;
+				cin.ignore();
+				cin.clear();
 				cout<<"You entered: "<< password_set <<endl;
 				HashObj_encrypt.set_password(password_set);
 				HashObj_encrypt.set_hash_key_from_password();
@@ -151,6 +157,8 @@ int main(int argc, char*argv[])
 
 				cout << "Enter your password to decrypt the file: " << endl;
 				cin >> password_entered;
+				cin.ignore();
+				cin.clear();
 				cout << "You entered:" << password_entered << endl;
 				HashObj_decrypt.set_password(password_entered);
 				HashObj_decrypt.set_hash_key_from_password();
