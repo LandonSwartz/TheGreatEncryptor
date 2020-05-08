@@ -228,7 +228,7 @@ public:
     };
 
     // Note: these two getter functions must be called from within a try block
-    vector<string> * get_decrypted_data() {
+    vector<string>* get_decrypted_data() {
         if (data_state == 2)
             return this->data;
         else if (data_state == 1) {
@@ -238,7 +238,7 @@ public:
             return nullptr;
         }
     };
-    vector<string> * get_encrypted_data() {
+    vector<string>* get_encrypted_data() {
         if (data_state == 1)
             return this->data;
         else if (data_state == 2) {

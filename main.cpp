@@ -50,7 +50,7 @@ void *newFile(void *arg)
 	ofstream file;
 	struct ft* fi = (struct ft*)arg;
 
-	file.open(fi->file.getFilename());
+	file.open("NewFile.txt");
 	ostream_iterator<string> output_iterator(file, "\n");
 	copy(fi->fileVector.begin(), fi->fileVector.end(), output_iterator);
 
@@ -133,6 +133,8 @@ int main(int argc, char*argv[])
 				cout<<"You entered: "<< password_set <<endl;
 				HashObj_encrypt.set_password(password_set);
 				HashObj_encrypt.set_hash_key_from_password();
+
+				cout<<"Hash key is: "<<HashObj_encrypt.get_hash_key()<<endl;
 				
 				// Once the password has been retrieved, set the hash key in the encryption object
 				encryptionObj.set_hash_key(HashObj_encrypt.get_hash_key());
