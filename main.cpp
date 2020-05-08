@@ -133,18 +133,20 @@ int main(int argc, char*argv[])
 				cout<<"You entered: "<< password_set <<endl;
 				HashObj_encrypt.set_password(password_set);
 				HashObj_encrypt.set_hash_key_from_password();
+
+				cout<<"Hash key is: "<<HashObj_encrypt.get_hash_key()<<endl;
 				
 				// Once the password has been retrieved, set the hash key in the encryption object
 				encryptionObj.set_hash_key(HashObj_encrypt.get_hash_key());
 
 				// The encryption class is ready to do some encryption. Give the class the data to work with.
 				// Data being sent to this function should not already be encrypted.
-			//	encryptionObj.set_decrypted_data(&(args->fileVector));
+				encryptionObj.set_decrypted_data(&(args->fileVector));
 
 				// Call the getter function on the encryption object. Even if the data is not retrieved, calling
 				// the getter function will perform the actual encryption. (This technically returns the address
 				// of the agrs->fileVector retrieved earlier, but we already have it.)
-		//		encryptionObj.get_encrypted_data();
+				encryptionObj.get_encrypted_data();
 
 				// Landon & Rushil, the data is modified in the vector, now what function do I call to update the file??
 				/* 

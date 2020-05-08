@@ -222,12 +222,11 @@ public:
 
     // The hash key must be set before any encryption or decryption can happen
     void set_hash_key(int key) {
-        if (to_string(key).length() == 9)
             this->hash_key = key;
     };
 
     // Note: these two getter functions must be called from within a try block
-    vector<string> * get_decrypted_data() {
+    vector<string>* get_decrypted_data() {
         if (data_state == 2)
             return this->data;
         else if (data_state == 1) {
@@ -237,7 +236,7 @@ public:
             return nullptr;
         }
     };
-    vector<string> * get_encrypted_data() {
+    vector<string>* get_encrypted_data() {
         if (data_state == 1)
             return this->data;
         else if (data_state == 2) {
