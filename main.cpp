@@ -9,6 +9,7 @@
 #include<iostream>
 #include<pthread.h>
 #include<vector>
+#include<iterator>
 #include<mutex>
 #include<string>
 #include<cstdlib>
@@ -40,6 +41,18 @@ void *readFile(void *arg)
 		fi->fileVector.push_back(word);
 	}
 	in.close();
+
+	return NULL;
+}
+
+void *newFile(void *arg)
+{
+	ofstream file;
+	struct ft* fi = (struct ft*)arg;
+
+	file.open(fi->file.getFilename());
+	ostream_iterator<string> output_iterator(file, "\n");
+	copy(fi->fileVector.begin(), fi->fileVector.end(), output_iterator);
 
 	return NULL;
 }
@@ -131,7 +144,7 @@ int main(int argc, char*argv[])
 				/* 
 				Call function here to update file based on the now modified vector
 				*/
-
+				rc = pthread_create(&threads[0], NULL, newFile, (void*)args);
 				break;
 			case 3:
 				//decrypt file
@@ -153,6 +166,7 @@ int main(int argc, char*argv[])
 
 				// Call the function necessary to overwrite the data in the file based on modifications made
 				// to the vector which contains the file contents.
+				rc = pthread_create(&threads[0], NULL, newFile, (void*)args);
 
 				break;
 			case 4:
