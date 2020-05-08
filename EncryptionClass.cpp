@@ -1,4 +1,5 @@
 // Aaron
+#include<iostream>
 
 #include<cstdlib>
 #include<pthread.h>
@@ -87,6 +88,7 @@ private:
             num_threads = 1;
             indices_per_thread = data->size();
         }
+
         // Create structs for each thread
         for (int i = 0; i < num_threads; i++) {
             alg_prms * alg_prms_strc = new alg_prms();
@@ -222,7 +224,6 @@ public:
 
     // The hash key must be set before any encryption or decryption can happen
     void set_hash_key(int key) {
-        if (to_string(key).length() == 9)
             this->hash_key = key;
     };
 
