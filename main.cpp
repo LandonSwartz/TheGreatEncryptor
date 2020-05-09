@@ -26,8 +26,7 @@ struct ft
 };
 
 /*Thread function that takes in arg struct with filename,
- * start_index, and end_index to read in thread in segments
- */
+ * start_index, and end_index to read in thread in segments*/
 void *readFile(void *arg)
 {
 	int i; int c;
@@ -35,16 +34,24 @@ void *readFile(void *arg)
 	string filename = fi->file.getFilename();
 	cout<<"Filename is: "<< filename<<endl;
 	ifstream in(filename);
+	if(!in)
+	{
+		cout<<"Failure to open file, try again. Spelling counts"<<endl;
+		return NULL;
+	}
 	string word;
 	while(in>>word)
 	{
 		fi->fileVector.push_back(word);
 	}
 	in.close();
+	cout<<"File was read!"<<endl;
 
 	return NULL;
 }
 
+//newFile
+//pthread function to create new file with encrypted data
 void *newFile(void *arg)
 {
 	ofstream file;
@@ -57,6 +64,7 @@ void *newFile(void *arg)
 	return NULL;
 }
 
+//Prints menu for program
 void printMenu()
 {
 	cout<<"----------MENU----------"<<endl;
@@ -121,7 +129,6 @@ int main(int argc, char*argv[])
 				args->file.open(filename);
 				rc = pthread_create(&threads[0], NULL, readFile, (void *)args);
 				pthread_join(threads[0], NULL);
-				cout<<"File was read!"<<endl;
 				break;
 			case 2: 
 				//encrypt file
@@ -153,6 +160,9 @@ int main(int argc, char*argv[])
 				Call function here to update file based on the now modified vector
 				*/
 				rc = pthread_create(&threads[0], NULL, newFile, (void*)args);
+				pthread_join(threads[0], NULL);
+				cout<<"Thank you for using our program. Please come again"<<endl;
+				exitCode =0;
 				break;
 			case 3:
 				//decrypt file
@@ -177,7 +187,7 @@ int main(int argc, char*argv[])
 				// Call the function necessary to overwrite the data in the file based on modifications made
 				// to the vector which contains the file contents.
 				rc = pthread_create(&threads[0], NULL, newFile, (void*)args);
-
+				pthread_join(threads[0], NULL);
 				break;
 			case 4:
 				//exit program
