@@ -98,9 +98,15 @@ int main(int argc, char*argv[])
 	int exitCode = 1;
 	int rc;
 
+	int has_encrypted_once = 0;
+	int has_decrypted_once = 0;
+
 	//creating threads
 	while(exitCode)
 	{
+		if (has_encrypted_once && has_decrypted_once)
+			break;
+
 		printMenu();
 		cin>>choice;
 		cin.ignore();
@@ -153,6 +159,9 @@ int main(int argc, char*argv[])
 				Call function here to update file based on the now modified vector
 				*/
 				rc = pthread_create(&threads[0], NULL, newFile, (void*)args);
+
+				has_encrypted_once = 1;
+
 				break;
 			case 3:
 				//decrypt file
@@ -177,6 +186,8 @@ int main(int argc, char*argv[])
 				// Call the function necessary to overwrite the data in the file based on modifications made
 				// to the vector which contains the file contents.
 				rc = pthread_create(&threads[0], NULL, newFile, (void*)args);
+
+				has_decrypted_once = 1;
 
 				break;
 			case 4:
